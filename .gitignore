@@ -1,0 +1,16 @@
+# Ignore Python virtual environment
+venv/
+
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+
+# VS Code and other editor settings
+.vscode/
+.idea/
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store

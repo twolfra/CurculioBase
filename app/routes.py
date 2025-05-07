@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect
 from .models import db, Relation
 
 main = Blueprint('main', __name__)
@@ -33,3 +33,11 @@ def submit():
 def relations():
     all_relations = Relation.query.all()
     return render_template('relations.html', relations=all_relations)
+
+@main.route('/delete/<int:interaction_id>', methods=['POST'])
+def delete(interaction_id):
+    relation = Relation.query.get_or_404(interaction_id)
+    db.session.delete(relation)
+    db.session.commit()
+    return redirect('/relations')
+

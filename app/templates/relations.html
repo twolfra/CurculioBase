@@ -21,6 +21,7 @@
                 <th>Comment</th>
                 <th>Entry Source</th>
                 <th>Entry By</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,11 @@
                 <td>{{ r.comment }}</td>
                 <td>{{ r.entry_source }}</td>
                 <td>{{ r.entry_by }}</td>
+                <td>
+                    <form action="/delete/{{ r.interaction_id }}" method="POST" onsubmit="return confirm('Delete this entry?');">
+                        <button type="submit">🗑️ Delete</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

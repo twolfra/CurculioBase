@@ -2,44 +2,48 @@
 <html>
 <head>
     <title>Insert Host-Parasite Relation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Insert Host-Parasite Relation</h1>
+
     <form method="POST" action="/submit">
         <label for="host">Host (Plant):</label>
         <input type="text" name="host" id="host" required><br>
-    
+
         <label for="parasite">Parasite (Weevil):</label>
         <input type="text" name="parasite" id="parasite" required><br>
-    
+
         <label for="citation_key">Citation Key:</label>
         <input type="text" name="citation_key"><br>
-    
+
         <label for="L_parasitic_mode">Larval Parasitic Mode:</label>
         <input type="text" name="L_parasitic_mode"><br>
-    
+
         <label for="L_host_organ">Larval Host Organ:</label>
         <input type="text" name="L_host_organ"><br>
-    
+
         <label for="A_parasitic_mode">Adult Parasitic Mode:</label>
         <input type="text" name="A_parasitic_mode"><br>
-    
+
         <label for="A_host_organ">Adult Host Organ:</label>
         <input type="text" name="A_host_organ"><br>
-    
+
         <label for="credibility">Credibility:</label>
         <input type="text" name="credibility"><br>
-    
+
         <label for="comment">Comment:</label>
         <textarea name="comment"></textarea><br>
-    
+
         <label for="entry_source">Entry Source:</label>
         <input type="text" name="entry_source"><br>
-    
+
         <label for="entry_by">Entry By:</label>
         <input type="text" name="entry_by"><br>
-    
+
         <button type="submit">Submit</button>
-    </form>    
+    </form>
+
+    <p><a href="/relations">📄 View all stored relations</a></p>
 </body>
 </html>

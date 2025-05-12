@@ -40,7 +40,8 @@
                 <td>{{ r.entry_source }}</td>
                 <td>{{ r.entry_by }}</td>
                 <td>
-                    <form action="/delete/{{ r.interaction_id }}" method="POST" onsubmit="return confirm('Delete this entry?');">
+                    <a href="/edit/{{ r.interaction_id }}">✏️ Edit</a>
+                    <form action="/delete/{{ r.interaction_id }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this entry?');">
                         <button type="submit">🗑️ Delete</button>
                     </form>
                 </td>

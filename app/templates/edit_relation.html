@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <title>Edit Relation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Edit Host-Parasite Relation</h1>
+
+    <form method="POST">
+        <label for="host">Host:</label>
+        <input type="text" name="host" value="{{ relation.host_species_name }}"><br>
+
+        <label for="parasite">Parasite:</label>
+        <input type="text" name="parasite" value="{{ relation.parasite_species_name }}"><br>
+
+        <label for="citation_key">Citation Key:</label>
+        <input type="text" name="citation_key" value="{{ relation.citation_key }}"><br>
+
+        <label for="L_parasitic_mode">Larval Parasitic Mode:</label>
+        <input type="text" name="L_parasitic_mode" value="{{ relation.L_parasitic_mode }}"><br>
+
+        <label for="L_host_organ">Larval Host Organ:</label>
+        <input type="text" name="L_host_organ" value="{{ relation.L_host_organ }}"><br>
+
+        <label for="A_parasitic_mode">Adult Parasitic Mode:</label>
+        <input type="text" name="A_parasitic_mode" value="{{ relation.A_parasitic_mode }}"><br>
+
+        <label for="A_host_organ">Adult Host Organ:</label>
+        <input type="text" name="A_host_organ" value="{{ relation.A_host_organ }}"><br>
+
+        <label for="credibility">Credibility:</label>
+        <input type="text" name="credibility" value="{{ relation.credibility }}"><br>
+
+        <label for="comment">Comment:</label>
+        <textarea name="comment">{{ relation.comment }}</textarea><br>
+
+        <label for="entry_source">Entry Source:</label>
+        <input type="text" name="entry_source" value="{{ relation.entry_source }}"><br>
+
+        <label for="entry_by">Entry By:</label>
+        <input type="text" name="entry_by" value="{{ relation.entry_by }}"><br>
+
+        <button type="submit">Update</button>
+    </form>
+
+    <p><a href="/relations">← Back to relations</a></p>
+</body>
+</html>

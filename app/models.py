@@ -17,3 +17,26 @@ class Relation(db.Model):
     entry_source = db.Column(db.String(100))
     entry_by = db.Column(db.String(100))
 
+
+class Parasite(db.Model):
+    __tablename__ = 'parasites'
+
+    parasite_ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    
+    dwc_genus = db.Column(db.String(100), nullable=False)
+    dwc_subgenus = db.Column(db.String(100))
+    dwc_specificEpithet = db.Column(db.String(100), nullable=False)
+    dwc_infraspecificEpithet = db.Column(db.String(100))
+    dwc_scientificNameAuthorship = db.Column(db.String(200))
+
+    dwc_tribe = db.Column(db.String(100), nullable=False)
+    supertribe = db.Column(db.String(100))
+    dwc_subfamily = db.Column(db.String(100), nullable=False)
+    dwc_family = db.Column(db.String(100), nullable=False)
+    dwc_superfamily = db.Column(db.String(100), nullable=False)
+    dwc_order = db.Column(db.String(100), nullable=False)
+
+    entry_source = db.Column(db.String(200))
+    entry_by = db.Column(db.String(100))
+
+

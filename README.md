@@ -1,2 +1,2 @@
 # CurculioBase
-A database system to record host-parasite relationships, aimed at phytophagous insects.
+An interactive database system to record host-parasite relationships, aimed at phytophagous insects.

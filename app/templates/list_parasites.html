@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+    <title>Parasite Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>All Parasite Records</h1>
+
+    {% if parasites %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Genus</th>
+                <th>Subgenus</th>
+                <th>Species</th>
+                <th>Tribe</th>
+                <th>Subfamily</th>
+                <th>Family</th>
+                <th>Superfamily</th>
+                <th>Order</th>
+                <th>Entered by</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in parasites %}
+            <tr>
+                <td>{{ p.parasite_ID }}</td>
+                <td>{{ p.dwc_genus }}</td>
+                <td>{{ p.dwc_subgenus }}</td>
+                <td>{{ p.dwc_specificEpithet }}</td>
+                <td>{{ p.dwc_tribe }}</td>
+                <td>{{ p.dwc_subfamily }}</td>
+                <td>{{ p.dwc_family }}</td>
+                <td>{{ p.dwc_superfamily }}</td>
+                <td>{{ p.dwc_order }}</td>
+                <td>{{ p.entry_by }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No parasite records found.</p>
+    {% endif %}
+
+    <p><a href="/">← Back to search</a></p>
+</body>
+</html>

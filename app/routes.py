@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect
-from .models import db, Relation
+from .models import db, Relation, Parasite
 
 main = Blueprint('main', __name__)
 
@@ -85,4 +85,34 @@ def search():
 def detail(interaction_id):
     relation = Relation.query.get_or_404(interaction_id)
     return render_template('detail.html', relation=relation)
+
+@main.route('/add-parasite', methods=['GET', 'POST'])
+def add_parasite():
+    if request.method == 'POST':
+        parasite = Parasite(
+            dwc_genus=request.form.get('dwc_genus'),
+            dwc_subgenus=request.form.get('dwc_subgenus'),
+            dwc_specificEpithet=request.form.get('dwc_specificEpithet'),
+            dwc_infraspecificEpithet=request.form.get('dwc_infraspecificEpithet'),
+            dwc_scientificNameAuthorship=request.form.get('dwc_scientificNameAuthorship'),
+            dwc_tribe=request.form.get('dwc_tribe'),
+            supertribe=request.form.get('supertribe'),
+            dwc_subfamily=request.form.get('dwc_subfamily'),
+            dwc_family=request.form.get('dwc_family'),
+            dwc_superfamily=request.form.get('dwc_superfamily'),
+            dwc_order=request.form.get('dwc_order'),
+            entry_source=request.form.get('entry_source'),
+            entry_by=request.form.get('entry_by'),
+        )
+        db.session.add(parasite)
+        db.session.commit()
+        return redirect('/add-parasite')
+
+    return render_template('add_parasite.html')
+
+@main.route('/parasites')
+def list_parasites():
+    parasites = Parasite.query.all()
+    return render_template('list_parasites.html', parasites=parasites)
+
 

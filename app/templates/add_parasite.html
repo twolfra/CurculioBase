@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>Add Parasite Record</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Add New Parasite Record</h1>
+    <form method="POST">
+        <label>Genus:</label>
+        <input type="text" name="dwc_genus" required><br>
+
+        <label>Subgenus:</label>
+        <input type="text" name="dwc_subgenus"><br>
+
+        <label>Specific Epithet:</label>
+        <input type="text" name="dwc_specificEpithet" required><br>
+
+        <label>Infraspecific Epithet:</label>
+        <input type="text" name="dwc_infraspecificEpithet"><br>
+
+        <label>Scientific Name Authorship:</label>
+        <input type="text" name="dwc_scientificNameAuthorship"><br>
+
+        <label>Tribe:</label>
+        <input type="text" name="dwc_tribe" required><br>
+
+        <label>Supertribe:</label>
+        <input type="text" name="supertribe"><br>
+
+        <label>Subfamily:</label>
+        <input type="text" name="dwc_subfamily" required><br>
+
+        <label>Family:</label>
+        <input type="text" name="dwc_family" required><br>
+
+        <label>Superfamily:</label>
+        <input type="text" name="dwc_superfamily" required><br>
+
+        <label>Order:</label>
+        <input type="text" name="dwc_order" required><br>
+
+        <label>Entry Source:</label>
+        <input type="text" name="entry_source"><br>
+
+        <label>Entry By:</label>
+        <input type="text" name="entry_by"><br>
+
+        <button type="submit">Save Parasite</button>
+    </form>
+
+    <p><a href="/">← Back to Search</a></p>
+</body>
+</html>

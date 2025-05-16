@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>Search Interactions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Search Host-Parasite Interactions</h1>
+
+    <form method="POST">
+        <label for="host">Host species:</label>
+        <input type="text" name="host" id="host"><br>
+
+        <label for="parasite">Parasite species:</label>
+        <input type="text" name="parasite" id="parasite"><br>
+
+        <button type="submit">🔍 Search</button>
+    </form>
+
+    <p><a href="{{ url_for('main.insert_form') }}">➕ Insert a new host-parasite relation</a></p>
+
+
+
+    {% if results is not none %}
+        <h2>Results</h2>
+        {% if results %}
+            <ul>
+            {% for r in results %}
+                <li>
+                    <a href="{{ url_for('main.detail', interaction_id=r.interaction_id) }}">
+                        {{ r.host_species_name }} ↔ {{ r.parasite_species_name }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

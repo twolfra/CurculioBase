@@ -3,8 +3,8 @@ from .models import db, Relation
 
 main = Blueprint('main', __name__)
 
-@main.route('/')
-def index():
+@main.route('/insert', methods=['GET'])
+def insert_form():
     return render_template('insert_relation.html')
 
 @main.route('/submit', methods=['POST'])
@@ -63,4 +63,26 @@ def edit(interaction_id):
 
     return render_template('edit_relation.html', relation=relation)
 
+@main.route('/', methods=['GET', 'POST'])
+def search():
+    results = None
+
+    if request.method == 'POST':
+        host_query = request.form.get('host')
+        parasite_query = request.form.get('parasite')
+
+        query = Relation.query
+        if host_query:
+            query = query.filter(Relation.host_species_name.ilike(f"%{host_query}%"))
+        if parasite_query:
+            query = query.filter(Relation.parasite_species_name.ilike(f"%{parasite_query}%"))
+
+        results = query.all()
+
+    return render_template('search.html', results=results)
+
+@main.route('/interaction/<int:interaction_id>')
+def detail(interaction_id):
+    relation = Relation.query.get_or_404(interaction_id)
+    return render_template('detail.html', relation=relation)
 

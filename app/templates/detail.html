@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+    <title>Interaction Detail</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Interaction Detail</h1>
+    <ul>
+        <li><strong>Host:</strong> {{ relation.host_species_name }}</li>
+        <li><strong>Parasite:</strong> {{ relation.parasite_species_name }}</li>
+        <li><strong>Citation Key:</strong> {{ relation.citation_key }}</li>
+        <li><strong>Larval Parasitic Mode:</strong> {{ relation.L_parasitic_mode }}</li>
+        <li><strong>Larval Host Organ:</strong> {{ relation.L_host_organ }}</li>
+        <li><strong>Adult Parasitic Mode:</strong> {{ relation.A_parasitic_mode }}</li>
+        <li><strong>Adult Host Organ:</strong> {{ relation.A_host_organ }}</li>
+        <li><strong>Credibility:</strong> {{ relation.credibility }}</li>
+        <li><strong>Comment:</strong> {{ relation.comment }}</li>
+        <li><strong>Entry Source:</strong> {{ relation.entry_source }}</li>
+        <li><strong>Entry By:</strong> {{ relation.entry_by }}</li>
+    </ul>
+
+    <p><a href="/">← Back to search</a></p>
+</body>
+</html>

@@ -3,9 +3,15 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class Relation(db.Model):
+    __tablename__ = 'relations'
+
     interaction_id = db.Column(db.Integer, primary_key=True)
-    host_species_name = db.Column(db.String(100), nullable=False)
-    parasite_species_name = db.Column(db.String(100), nullable=False)
+
+    host_id = db.Column(db.Integer, db.ForeignKey('hosts.host_ID'), nullable=False)
+    parasite_id = db.Column(db.Integer, db.ForeignKey('parasites.parasite_ID'), nullable=False)
+
+    host = db.relationship('Host', backref='relations')
+    parasite = db.relationship('Parasite', backref='relations')
 
     citation_key = db.Column(db.String(200))
     L_parasitic_mode = db.Column(db.String(100))
@@ -18,11 +24,13 @@ class Relation(db.Model):
     entry_by = db.Column(db.String(100))
 
 
+
 class Parasite(db.Model):
     __tablename__ = 'parasites'
 
     parasite_ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
+    parasite_species_name = db.Column(db.String(100), nullable=False)
     dwc_genus = db.Column(db.String(100), nullable=False)
     dwc_subgenus = db.Column(db.String(100))
     dwc_specificEpithet = db.Column(db.String(100), nullable=False)
@@ -36,6 +44,30 @@ class Parasite(db.Model):
     dwc_superfamily = db.Column(db.String(100), nullable=False)
     dwc_order = db.Column(db.String(100), nullable=False)
 
+    entry_source = db.Column(db.String(200))
+    entry_by = db.Column(db.String(100))
+
+
+class Host(db.Model):
+    __tablename__ = 'hosts'
+
+    host_ID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    host_species_name = db.Column(db.String(100), nullable=False)
+    dwc_genus = db.Column(db.String(100), nullable=False)
+    dwc_subgenus = db.Column(db.String(100))
+    dwc_specificEpithet = db.Column(db.String(100))
+    dwc_infraspecificEpithet = db.Column(db.String(100))
+    dwc_scientificNameAuthorship = db.Column(db.String(200))
+
+    dwc_tribe = db.Column(db.String(100), nullable=False)
+    supertribe = db.Column(db.String(100))
+    dwc_subfamily = db.Column(db.String(100), nullable=False)
+    dwc_family = db.Column(db.String(100), nullable=False)
+    dwc_superfamily = db.Column(db.String(100), nullable=False)
+    dwc_order = db.Column(db.String(100), nullable=False)
+
+    dwc_vernacularName = db.Column(db.String(200))
     entry_source = db.Column(db.String(200))
     entry_by = db.Column(db.String(100))
 

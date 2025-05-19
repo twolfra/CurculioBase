@@ -1,15 +1,16 @@
 <!doctype html>
 <html>
 <head>
-    <title>Add Parasite Record</title>
+    <title>Add Host Record</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Add New Parasite Record</h1>
+    <h1>Add New Host Record</h1>
+
     <form method="POST">
 
-        <label>Parasite Name:</label>
-        <input type="text" name="parasite_name"><br>
+        <label>Host Species Name</label>
+        <input type="text" name="host_name" required><br>
 
         <label>Genus:</label>
         <input type="text" name="dwc_genus" required><br>
@@ -27,22 +28,25 @@
         <input type="text" name="dwc_scientificNameAuthorship"><br>
 
         <label>Tribe:</label>
-        <input type="text" name="dwc_tribe" ><br>
+        <input type="text" name="dwc_tribe"><br>
 
         <label>Supertribe:</label>
         <input type="text" name="supertribe"><br>
 
         <label>Subfamily:</label>
-        <input type="text" name="dwc_subfamily" ><br>
+        <input type="text" name="dwc_subfamily"><br>
 
         <label>Family:</label>
-        <input type="text" name="dwc_family" ><br>
+        <input type="text" name="dwc_family"><br>
 
         <label>Superfamily:</label>
-        <input type="text" name="dwc_superfamily" ><br>
+        <input type="text" name="dwc_superfamily"><br>
 
         <label>Order:</label>
-        <input type="text" name="dwc_order" ><br>
+        <input type="text" name="dwc_order"><br>
+
+        <label>Vernacular Name:</label>
+        <input type="text" name="dwc_vernacularName"><br>
 
         <label>Entry Source:</label>
         <input type="text" name="entry_source"><br>
@@ -50,9 +54,9 @@
         <label>Entry By:</label>
         <input type="text" name="entry_by"><br>
 
-        <button type="submit">Save Parasite</button>
+        <button type="submit">Save Host</button>
     </form>
 
-    <p><a href="/">← Back to Search</a></p>
+    <p><a href="/">← Back to search</a></p>
 </body>
 </html>

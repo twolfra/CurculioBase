@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Species Name</th>
                 <th>Genus</th>
                 <th>Subgenus</th>
                 <th>Species</th>
@@ -27,6 +28,7 @@
             {% for p in parasites %}
             <tr>
                 <td>{{ p.parasite_ID }}</td>
+                <td>{{ p.parasite_species_name }}</td>
                 <td>{{ p.dwc_genus }}</td>
                 <td>{{ p.dwc_subgenus }}</td>
                 <td>{{ p.dwc_specificEpithet }}</td>

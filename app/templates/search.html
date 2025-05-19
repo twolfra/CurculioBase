@@ -20,17 +20,21 @@
     <p><a href="{{ url_for('main.insert_form') }}">➕ Insert a new host-parasite relation</a></p>
     <p><a href="{{ url_for('main.add_parasite') }}">🪲 Add a new parasite record</a></p>
     <p><a href="{{ url_for('main.list_parasites') }}">🪲 View all parasite records</a></p>
+    <p><a href="{{ url_for('main.add_host') }}">🌿 Add a new host plant record</a></p>
+
+
 
 
 
     {% if results is not none %}
         <h2>Results</h2>
         {% if results %}
-            <ul>
+        <ul>
             {% for r in results %}
                 <li>
                     <a href="{{ url_for('main.detail', interaction_id=r.interaction_id) }}">
-                        {{ r.host_species_name }} ↔ {{ r.parasite_species_name }}
+                        {{ r.host.dwc_genus }} {{ r.host.dwc_specificEpithet }} ↔ 
+                        {{ r.parasite.dwc_genus }} {{ r.parasite.dwc_specificEpithet }}
                     </a>
                 </li>
             {% endfor %}

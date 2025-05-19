@@ -1,33 +1,63 @@
 from flask import Blueprint, render_template, request, redirect
-from .models import db, Relation, Parasite
+from .models import Relation, Parasite, Host, db
+from sqlalchemy.orm import joinedload
+
+
+def na_if_blank(value):
+    return value.strip() if value and value.strip() else "n.a."
+
 
 main = Blueprint('main', __name__)
 
 @main.route('/insert', methods=['GET'])
 def insert_form():
-    return render_template('insert_relation.html')
+
+    """insert host parasite relations"""
+
+    hosts = Host.query.order_by(Host.dwc_genus).all()
+    parasites = Parasite.query.order_by(Parasite.dwc_genus).all()
+
+    if request.method == 'POST':
+        relation = Relation(
+            host_species_name=request.form.get('host_name'),
+            parasite_species_name=request.form.get('parasite_name'),
+            citation_key=request.form.get('citation_key'),
+            L_parasitic_mode=request.form.get('L_parasitic_mode'),
+            L_host_organ=request.form.get('L_host_organ'),
+            A_parasitic_mode=request.form.get('A_parasitic_mode'),
+            A_host_organ=request.form.get('A_host_organ'),
+            credibility=request.form.get('credibility'),
+            comment=request.form.get('comment'),
+            entry_source=request.form.get('entry_source'),
+            entry_by=request.form.get('entry_by')
+        )
+        db.session.add(relation)
+        db.session.commit()
+        return redirect('/relations')
+
+    return render_template('insert_relation.html', hosts=hosts, parasites=parasites)
 
 @main.route('/submit', methods=['POST'])
 def submit():
-    data = {
-        'host_species_name': request.form.get('host'),
-        'parasite_species_name': request.form.get('parasite'),
-        'citation_key': request.form.get('citation_key'),
-        'L_parasitic_mode': request.form.get('L_parasitic_mode'),
-        'L_host_organ': request.form.get('L_host_organ'),
-        'A_parasitic_mode': request.form.get('A_parasitic_mode'),
-        'A_host_organ': request.form.get('A_host_organ'),
-        'credibility': request.form.get('credibility'),
-        'comment': request.form.get('comment'),
-        'entry_source': request.form.get('entry_source'),
-        'entry_by': request.form.get('entry_by'),
-    }
 
-    new_entry = Relation(**data)
-    db.session.add(new_entry)
+    """submits host-parasite relations"""
+
+    relation = Relation(
+        host_id=request.form.get('host_id'),
+        parasite_id=request.form.get('parasite_id'),
+        citation_key=na_if_blank(request.form.get('citation_key')),
+        L_parasitic_mode=na_if_blank(request.form.get('L_parasitic_mode')),
+        L_host_organ=na_if_blank(request.form.get('L_host_organ')),
+        A_parasitic_mode=na_if_blank(request.form.get('A_parasitic_mode')),
+        A_host_organ=na_if_blank(request.form.get('A_host_organ')),
+        credibility=na_if_blank(request.form.get('credibility')),
+        comment=na_if_blank(request.form.get('comment')),
+        entry_source=na_if_blank(request.form.get('entry_source')),
+        entry_by=na_if_blank(request.form.get('entry_by')),
+    )
+    db.session.add(relation)
     db.session.commit()
-
-    return "Entry saved successfully!"
+    return redirect('/relations')
 
 @main.route('/relations')
 def relations():
@@ -60,6 +90,8 @@ def edit(interaction_id):
 
         db.session.commit()
         return redirect('/relations')
+    
+    
 
     return render_template('edit_relation.html', relation=relation)
 
@@ -71,15 +103,17 @@ def search():
         host_query = request.form.get('host')
         parasite_query = request.form.get('parasite')
 
-        query = Relation.query
-        if host_query:
-            query = query.filter(Relation.host_species_name.ilike(f"%{host_query}%"))
-        if parasite_query:
-            query = query.filter(Relation.parasite_species_name.ilike(f"%{parasite_query}%"))
+        query = Relation.query.join(Relation.host).join(Relation.parasite)
 
-        results = query.all()
+        if host_query:
+            query = query.filter(Host.host_species_name.ilike(f"%{host_query}%"))
+        if parasite_query:
+            query = query.filter(Parasite.parasite_species_name.ilike(f"%{parasite_query}%"))
+
+        results = query.options(joinedload(Relation.host), joinedload(Relation.parasite)).all()
 
     return render_template('search.html', results=results)
+
 
 @main.route('/interaction/<int:interaction_id>')
 def detail(interaction_id):
@@ -89,20 +123,25 @@ def detail(interaction_id):
 @main.route('/add-parasite', methods=['GET', 'POST'])
 def add_parasite():
     if request.method == 'POST':
+        dwc_genus = request.form.get('dwc_genus')
+        if not dwc_genus or not dwc_genus.strip():
+            return "Genus is required", 400
+
         parasite = Parasite(
-            dwc_genus=request.form.get('dwc_genus'),
-            dwc_subgenus=request.form.get('dwc_subgenus'),
-            dwc_specificEpithet=request.form.get('dwc_specificEpithet'),
-            dwc_infraspecificEpithet=request.form.get('dwc_infraspecificEpithet'),
-            dwc_scientificNameAuthorship=request.form.get('dwc_scientificNameAuthorship'),
-            dwc_tribe=request.form.get('dwc_tribe'),
-            supertribe=request.form.get('supertribe'),
-            dwc_subfamily=request.form.get('dwc_subfamily'),
-            dwc_family=request.form.get('dwc_family'),
-            dwc_superfamily=request.form.get('dwc_superfamily'),
-            dwc_order=request.form.get('dwc_order'),
-            entry_source=request.form.get('entry_source'),
-            entry_by=request.form.get('entry_by'),
+            parasite_species_name = request.form.get('parasite_name'),
+            dwc_genus=dwc_genus.strip(),
+            dwc_subgenus=na_if_blank(request.form.get('dwc_subgenus')),
+            dwc_specificEpithet=na_if_blank(request.form.get('dwc_specificEpithet')),
+            dwc_infraspecificEpithet=na_if_blank(request.form.get('dwc_infraspecificEpithet')),
+            dwc_scientificNameAuthorship=na_if_blank(request.form.get('dwc_scientificNameAuthorship')),
+            dwc_tribe=na_if_blank(request.form.get('dwc_tribe')),
+            supertribe=na_if_blank(request.form.get('supertribe')),
+            dwc_subfamily=na_if_blank(request.form.get('dwc_subfamily')),
+            dwc_family=na_if_blank(request.form.get('dwc_family')),
+            dwc_superfamily=na_if_blank(request.form.get('dwc_superfamily')),
+            dwc_order=na_if_blank(request.form.get('dwc_order')),
+            entry_source=na_if_blank(request.form.get('entry_source')),
+            entry_by=na_if_blank(request.form.get('entry_by')),
         )
         db.session.add(parasite)
         db.session.commit()
@@ -114,5 +153,35 @@ def add_parasite():
 def list_parasites():
     parasites = Parasite.query.all()
     return render_template('list_parasites.html', parasites=parasites)
+
+@main.route('/add-host', methods=['GET', 'POST'])
+def add_host():
+    if request.method == 'POST':
+        dwc_genus = request.form.get('dwc_genus')
+        if not dwc_genus or not dwc_genus.strip():
+            return "Genus is required", 400
+
+        host = Host(
+            host_species_name = request.form.get('host_name'),
+            dwc_genus=dwc_genus.strip(),
+            dwc_subgenus=na_if_blank(request.form.get('dwc_subgenus')),
+            dwc_specificEpithet=na_if_blank(request.form.get('dwc_specificEpithet')),
+            dwc_infraspecificEpithet=na_if_blank(request.form.get('dwc_infraspecificEpithet')),
+            dwc_scientificNameAuthorship=na_if_blank(request.form.get('dwc_scientificNameAuthorship')),
+            dwc_tribe=na_if_blank(request.form.get('dwc_tribe')),
+            supertribe=na_if_blank(request.form.get('supertribe')),
+            dwc_subfamily=na_if_blank(request.form.get('dwc_subfamily')),
+            dwc_family=na_if_blank(request.form.get('dwc_family')),
+            dwc_superfamily=na_if_blank(request.form.get('dwc_superfamily')),
+            dwc_order=na_if_blank(request.form.get('dwc_order')),
+            dwc_vernacularName=na_if_blank(request.form.get('dwc_vernacularName')),
+            entry_source=na_if_blank(request.form.get('entry_source')),
+            entry_by=na_if_blank(request.form.get('entry_by')),
+        )
+        db.session.add(host)
+        db.session.commit()
+        return redirect('/add-host')
+
+    return render_template('add_host.html')
 
 

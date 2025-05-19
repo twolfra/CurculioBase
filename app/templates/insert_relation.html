@@ -8,29 +8,75 @@
     <h1>Insert Host-Parasite Relation</h1>
 
     <form method="POST" action="/submit">
-        <label for="host">Host (Plant):</label>
-        <input type="text" name="host" id="host" required><br>
-
-        <label for="parasite">Parasite (Weevil):</label>
-        <input type="text" name="parasite" id="parasite" required><br>
+        <label for="host_name">Host (Plant):</label>
+        <select name="host_name" required>
+            <option value="">-- Select a host --</option>
+            {% for host in hosts %}
+                <option value="{{ host.host_ID }}">
+                    {{ host.host_species_name }}
+                </option>
+            {% endfor %}
+        </select><br>
+        
+        <label for="parasite_name">Parasite (Weevil):</label>
+        <select name="parasite_name" required>
+            <option value="">-- Select a parasite --</option>
+            {% for p in parasites %}
+                <option value="{{ p.parasite_ID }}">
+                    {{ p.parasite_species_name }}
+                </option>
+            {% endfor %}
+        </select><br>
+       
 
         <label for="citation_key">Citation Key:</label>
         <input type="text" name="citation_key"><br>
 
         <label for="L_parasitic_mode">Larval Parasitic Mode:</label>
-        <input type="text" name="L_parasitic_mode"><br>
+        <select name="L_parasitic_mode" required>
+            <option value="">-- Select a mode --</option>
+            <option value="endoparasite">Endoparasite</option>
+            <option value="ectoparasite">Ectoparasite</option>
+            <option value="gall-former">Gall-former</option>
+            <option value="seed predator">Seed predator</option>
+            <option value="stem borer">Stem borer</option>
+            <option value="root borer">Root borer</option>
+            <option value="unknown">Unknown</option>
+        </select><br>
 
         <label for="L_host_organ">Larval Host Organ:</label>
-        <input type="text" name="L_host_organ"><br>
-
+        <select name="L_host_organ" required>
+            <option value="">-- Select an organ --</option>
+            <option value="leaf">Leaf</option>
+            <option value="stem">Stem</option>
+            <option value="root">Root</option>
+            <option value="fruit">Fruit</option>
+            <option value="seed">Seed</option>
+            <option value="flower">Flower</option>
+            <option value="bud">Bud</option>
+            <option value="shoot">Shoot</option>
+            <option value="gall">Gall</option>
+            <option value="wood">Wood</option>
+            <option value="unknown">Unknown</option>
+        </select><br>
+        
         <label for="A_parasitic_mode">Adult Parasitic Mode:</label>
-        <input type="text" name="A_parasitic_mode"><br>
+        <select name="L_host_organ" required>
+            <option value="">-- Select a mode --</option>
+            <option value="vagrant">vagrant</option>
+            <option value="borer">borer</option>
+        </select><br>
 
         <label for="A_host_organ">Adult Host Organ:</label>
         <input type="text" name="A_host_organ"><br>
 
         <label for="credibility">Credibility:</label>
-        <input type="text" name="credibility"><br>
+        <select name="L_host_organ" required>
+            <option value="">-- Select a mode --</option>
+            <option value="dubious">dubious (e.g. no evidence provided)</option>
+            <option value="tentative">tentative (e.g. weak evidence, like adult feeding)</option>
+            <option value="credible">credible (e.g. reared from the plant)</option>
+        </select><br>
 
         <label for="comment">Comment:</label>
         <textarea name="comment"></textarea><br>

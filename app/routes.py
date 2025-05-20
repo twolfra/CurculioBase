@@ -9,27 +9,24 @@ def na_if_blank(value):
 
 main = Blueprint('main', __name__)
 
-@main.route('/insert', methods=['GET'])
+@main.route('/insert', methods=['GET', 'POST'])
 def insert_form():
-
-    """insert host parasite relations"""
-
     hosts = Host.query.order_by(Host.dwc_genus).all()
     parasites = Parasite.query.order_by(Parasite.dwc_genus).all()
 
     if request.method == 'POST':
         relation = Relation(
-            host_species_name=request.form.get('host_name'),
-            parasite_species_name=request.form.get('parasite_name'),
-            citation_key=request.form.get('citation_key'),
-            L_parasitic_mode=request.form.get('L_parasitic_mode'),
-            L_host_organ=request.form.get('L_host_organ'),
-            A_parasitic_mode=request.form.get('A_parasitic_mode'),
-            A_host_organ=request.form.get('A_host_organ'),
-            credibility=request.form.get('credibility'),
-            comment=request.form.get('comment'),
-            entry_source=request.form.get('entry_source'),
-            entry_by=request.form.get('entry_by')
+            host_id=request.form.get('host_ID'),       # corrected key
+            parasite_id=request.form.get('parasite_ID'),  # corrected key
+            citation_key=na_if_blank(request.form.get('citation_key')),
+            L_parasitic_mode=na_if_blank(request.form.get('L_parasitic_mode')),
+            L_host_organ=na_if_blank(request.form.get('L_host_organ')),
+            A_parasitic_mode=na_if_blank(request.form.get('A_parasitic_mode')),
+            A_host_organ=na_if_blank(request.form.get('A_host_organ')),
+            credibility=na_if_blank(request.form.get('credibility')),
+            comment=na_if_blank(request.form.get('comment')),
+            entry_source=na_if_blank(request.form.get('entry_source')),
+            entry_by=na_if_blank(request.form.get('entry_by')),
         )
         db.session.add(relation)
         db.session.commit()
@@ -37,27 +34,6 @@ def insert_form():
 
     return render_template('insert_relation.html', hosts=hosts, parasites=parasites)
 
-@main.route('/submit', methods=['POST'])
-def submit():
-
-    """submits host-parasite relations"""
-
-    relation = Relation(
-        host_id=request.form.get('host_id'),
-        parasite_id=request.form.get('parasite_id'),
-        citation_key=na_if_blank(request.form.get('citation_key')),
-        L_parasitic_mode=na_if_blank(request.form.get('L_parasitic_mode')),
-        L_host_organ=na_if_blank(request.form.get('L_host_organ')),
-        A_parasitic_mode=na_if_blank(request.form.get('A_parasitic_mode')),
-        A_host_organ=na_if_blank(request.form.get('A_host_organ')),
-        credibility=na_if_blank(request.form.get('credibility')),
-        comment=na_if_blank(request.form.get('comment')),
-        entry_source=na_if_blank(request.form.get('entry_source')),
-        entry_by=na_if_blank(request.form.get('entry_by')),
-    )
-    db.session.add(relation)
-    db.session.commit()
-    return redirect('/relations')
 
 @main.route('/relations')
 def relations():
@@ -97,20 +73,27 @@ def edit(interaction_id):
 
 @main.route('/', methods=['GET', 'POST'])
 def search():
+
+    """gives search output"""
+
     results = None
 
     if request.method == 'POST':
-        host_query = request.form.get('host')
-        parasite_query = request.form.get('parasite')
+        host_name = request.form.get('host_name')
+        parasite_name = request.form.get('parasite_name')
 
         query = Relation.query.join(Relation.host).join(Relation.parasite)
 
-        if host_query:
-            query = query.filter(Host.host_species_name.ilike(f"%{host_query}%"))
-        if parasite_query:
-            query = query.filter(Parasite.parasite_species_name.ilike(f"%{parasite_query}%"))
+        if host_name:
+            query = query.filter(Host.host_name.ilike(f"%{host_name}%"))
+        if parasite_name:
+            query = query.filter(Parasite.parasite_name.ilike(f"%{parasite_name}%"))
 
-        results = query.options(joinedload(Relation.host), joinedload(Relation.parasite)).all()
+        results = query.options(
+            db.joinedload(Relation.host),
+            db.joinedload(Relation.parasite)
+        ).all()
+
 
     return render_template('search.html', results=results)
 
@@ -122,14 +105,13 @@ def detail(interaction_id):
 
 @main.route('/add-parasite', methods=['GET', 'POST'])
 def add_parasite():
-    if request.method == 'POST':
-        dwc_genus = request.form.get('dwc_genus')
-        if not dwc_genus or not dwc_genus.strip():
-            return "Genus is required", 400
 
+    if request.method == 'POST':
+        
         parasite = Parasite(
-            parasite_species_name = request.form.get('parasite_name'),
-            dwc_genus=dwc_genus.strip(),
+            parasite_name = request.form.get('parasite_name'),
+            parasite_species_name=na_if_blank(request.form.get('species_name')),
+            dwc_genus=na_if_blank("dwc_genus"),
             dwc_subgenus=na_if_blank(request.form.get('dwc_subgenus')),
             dwc_specificEpithet=na_if_blank(request.form.get('dwc_specificEpithet')),
             dwc_infraspecificEpithet=na_if_blank(request.form.get('dwc_infraspecificEpithet')),
@@ -156,14 +138,13 @@ def list_parasites():
 
 @main.route('/add-host', methods=['GET', 'POST'])
 def add_host():
+
     if request.method == 'POST':
-        dwc_genus = request.form.get('dwc_genus')
-        if not dwc_genus or not dwc_genus.strip():
-            return "Genus is required", 400
 
         host = Host(
-            host_species_name = request.form.get('host_name'),
-            dwc_genus=dwc_genus.strip(),
+            host_name = request.form.get('host_name'),
+            host_species_name = request.form.get('species_name'),
+            dwc_genus=request.form.get('dwc_genus'),
             dwc_subgenus=na_if_blank(request.form.get('dwc_subgenus')),
             dwc_specificEpithet=na_if_blank(request.form.get('dwc_specificEpithet')),
             dwc_infraspecificEpithet=na_if_blank(request.form.get('dwc_infraspecificEpithet')),

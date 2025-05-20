@@ -1,26 +1,27 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Stored Host-Parasite Relations</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
+<head>
+    <title>Host–Parasite Relations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
 <body>
-    <h1>Host-Parasite Relations</h1>
+    <h1>All Host–Parasite Relations</h1>
+
+    {% if relations %}
     <table>
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Host Species</th>
-                <th>Parasite Species</th>
+                <th>Host Name</th>
+                <th>Parasite Name</th>
                 <th>Citation Key</th>
-                <th>L Parasitic Mode</th>
-                <th>L Host Organ</th>
-                <th>A Parasitic Mode</th>
-                <th>A Host Organ</th>
+                <th>Larval Mode</th>
+                <th>Larval Organ</th>
+                <th>Adult Mode</th>
+                <th>Adult Organ</th>
                 <th>Credibility</th>
                 <th>Comment</th>
-                <th>Entry Source</th>
-                <th>Entry By</th>
+                <th>Entered By</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,20 +29,19 @@
             {% for r in relations %}
             <tr>
                 <td>{{ r.interaction_id }}</td>
-                <td>{{ r.host_species_name }}</td>
-                <td>{{ r.parasite_species_name }}</td>
-                <td>{{ r.citation_key }}</td>
-                <td>{{ r.L_parasitic_mode }}</td>
-                <td>{{ r.L_host_organ }}</td>
-                <td>{{ r.A_parasitic_mode }}</td>
-                <td>{{ r.A_host_organ }}</td>
-                <td>{{ r.credibility }}</td>
-                <td>{{ r.comment }}</td>
-                <td>{{ r.entry_source }}</td>
-                <td>{{ r.entry_by }}</td>
+                <td>{{ r.host.host_name }}</td>
+                <td>{{ r.parasite.parasite_name }}</td>
+                <td>{{ r.citation_key or 'n.a.' }}</td>
+                <td>{{ r.L_parasitic_mode or 'n.a.' }}</td>
+                <td>{{ r.L_host_organ or 'n.a.' }}</td>
+                <td>{{ r.A_parasitic_mode or 'n.a.' }}</td>
+                <td>{{ r.A_host_organ or 'n.a.' }}</td>
+                <td>{{ r.credibility or 'n.a.' }}</td>
+                <td>{{ r.comment or '—' }}</td>
+                <td>{{ r.entry_by or 'n.a.' }}</td>
                 <td>
-                    <a href="/edit/{{ r.interaction_id }}">✏️ Edit</a>
-                    <form action="/delete/{{ r.interaction_id }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this entry?');">
+                    <a href="{{ url_for('main.edit', interaction_id=r.interaction_id) }}">✏️ Edit</a>
+                    <form action="{{ url_for('main.delete', interaction_id=r.interaction_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this entry?');">
                         <button type="submit">🗑️ Delete</button>
                     </form>
                 </td>
@@ -49,7 +49,10 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <p>No relation records found.</p>
+    {% endif %}
 
-    <p><a href="/">← Insert another relation</a></p>
+    <p><a href="/">← Back to search</a></p>
 </body>
 </html>

@@ -8,12 +8,12 @@
     <h1>Search Host-Parasite Interactions</h1>
 
     <form method="POST">
-        <label for="host">Host species:</label>
-        <input type="text" name="host" id="host"><br>
-
-        <label for="parasite">Parasite species:</label>
-        <input type="text" name="parasite" id="parasite"><br>
-
+        <label for="host_name">Host name:</label>
+        <input type="text" name="host_name" id="host_name" placeholder="e.g. Quercus robur"><br>
+    
+        <label for="parasite_name">Parasite name:</label>
+        <input type="text" name="parasite_name" id="parasite_name" placeholder="e.g. Curculio nucum"><br>
+    
         <button type="submit">🔍 Search</button>
     </form>
 
@@ -33,8 +33,8 @@
             {% for r in results %}
                 <li>
                     <a href="{{ url_for('main.detail', interaction_id=r.interaction_id) }}">
-                        {{ r.host.dwc_genus }} {{ r.host.dwc_specificEpithet }} ↔ 
-                        {{ r.parasite.dwc_genus }} {{ r.parasite.dwc_specificEpithet }}
+                        {{ r.host.host_name }}  ↔ 
+                        {{ r.parasite.parasite_name }} 
                     </a>
                 </li>
             {% endfor %}

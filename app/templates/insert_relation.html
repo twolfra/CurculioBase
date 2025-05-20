@@ -7,23 +7,23 @@
 <body>
     <h1>Insert Host-Parasite Relation</h1>
 
-    <form method="POST" action="/submit">
-        <label for="host_name">Host (Plant):</label>
-        <select name="host_name" required>
+    <form method="POST" action="/insert">
+        <label for="host_ID">Host (Plant):</label>
+        <select name="host_ID" required>
             <option value="">-- Select a host --</option>
             {% for host in hosts %}
-                <option value="{{ host.host_ID }}">
-                    {{ host.host_species_name }}
-                </option>
+            <option value="{{ host.host_ID }}">
+                {{ host.host_name }}
+            </option>
             {% endfor %}
         </select><br>
         
-        <label for="parasite_name">Parasite (Weevil):</label>
-        <select name="parasite_name" required>
+        <label for="parasite_ID">Parasite (Weevil):</label>
+        <select name="parasite_ID" required>
             <option value="">-- Select a parasite --</option>
             {% for p in parasites %}
                 <option value="{{ p.parasite_ID }}">
-                    {{ p.parasite_species_name }}
+                    {{ p.parasite_name }}
                 </option>
             {% endfor %}
         </select><br>
@@ -33,7 +33,7 @@
         <input type="text" name="citation_key"><br>
 
         <label for="L_parasitic_mode">Larval Parasitic Mode:</label>
-        <select name="L_parasitic_mode" required>
+        <select name="L_parasitic_mode">
             <option value="">-- Select a mode --</option>
             <option value="endoparasite">Endoparasite</option>
             <option value="ectoparasite">Ectoparasite</option>
@@ -45,7 +45,7 @@
         </select><br>
 
         <label for="L_host_organ">Larval Host Organ:</label>
-        <select name="L_host_organ" required>
+        <select name="L_host_organ">
             <option value="">-- Select an organ --</option>
             <option value="leaf">Leaf</option>
             <option value="stem">Stem</option>
@@ -61,7 +61,7 @@
         </select><br>
         
         <label for="A_parasitic_mode">Adult Parasitic Mode:</label>
-        <select name="L_host_organ" required>
+        <select name="L_host_organ">
             <option value="">-- Select a mode --</option>
             <option value="vagrant">vagrant</option>
             <option value="borer">borer</option>
@@ -71,7 +71,7 @@
         <input type="text" name="A_host_organ"><br>
 
         <label for="credibility">Credibility:</label>
-        <select name="L_host_organ" required>
+        <select name="L_host_organ">
             <option value="">-- Select a mode --</option>
             <option value="dubious">dubious (e.g. no evidence provided)</option>
             <option value="tentative">tentative (e.g. weak evidence, like adult feeding)</option>

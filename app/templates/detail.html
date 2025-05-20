@@ -7,8 +7,8 @@
 <body>
     <h1>Interaction Detail</h1>
     <ul>
-        <li><strong>Host:</strong> {{ relation.host_species_name }}</li>
-        <li><strong>Parasite:</strong> {{ relation.parasite_species_name }}</li>
+        <li><strong>Host:</strong> {{ relation.host.host_name }}</li>
+        <li><strong>Parasite:</strong> {{ relation.parasite.parasite_name }}</li>
         <li><strong>Citation Key:</strong> {{ relation.citation_key }}</li>
         <li><strong>Larval Parasitic Mode:</strong> {{ relation.L_parasitic_mode }}</li>
         <li><strong>Larval Host Organ:</strong> {{ relation.L_host_organ }}</li>

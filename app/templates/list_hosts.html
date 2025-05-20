@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <title>All Host Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>All Host Plant Records</h1>
+
+    {% if hosts %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Host Name</th>
+                <th>Species Name</th>
+                <th>Genus</th>
+                <th>Specific Epithet</th>
+                <th>Tribe</th>
+                <th>Subfamily</th>
+                <th>Family</th>
+                <th>Superfamily</th>
+                <th>Order</th>
+                <th>Vernacular Name</th>
+                <th>Entered By</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for host in hosts %}
+            <tr>
+                <td>{{ host.host_ID }}</td>
+                <td>{{ host.host_name or "n.a." }}</td>
+                <td>{{ host.host_species_name }}</td>
+                <td>{{ host.dwc_genus }}</td>
+                <td>{{ host.dwc_specificEpithet or "n.a." }}</td>
+                <td>{{ host.dwc_tribe }}</td>
+                <td>{{ host.dwc_subfamily }}</td>
+                <td>{{ host.dwc_family }}</td>
+                <td>{{ host.dwc_superfamily }}</td>
+                <td>{{ host.dwc_order }}</td>
+                <td>{{ host.dwc_vernacularName or "n.a." }}</td>
+                <td>{{ host.entry_by or "n.a." }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No host records found.</p>
+    {% endif %}
+
+    <p><a href="/">← Back to search</a></p>
+</body>
+</html>

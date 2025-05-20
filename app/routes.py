@@ -131,10 +131,6 @@ def add_parasite():
 
     return render_template('add_parasite.html')
 
-@main.route('/parasites')
-def list_parasites():
-    parasites = Parasite.query.all()
-    return render_template('list_parasites.html', parasites=parasites)
 
 @main.route('/add-host', methods=['GET', 'POST'])
 def add_host():
@@ -164,5 +160,21 @@ def add_host():
         return redirect('/add-host')
 
     return render_template('add_host.html')
+
+
+
+@main.route('/parasites')
+def list_parasites():
+    parasites = Parasite.query.all()
+    return render_template('list_parasites.html', parasites=parasites)
+
+
+@main.route('/hosts')
+def list_hosts():
+    hosts = Host.query.order_by(Host.dwc_genus).all()
+    return render_template('list_hosts.html', hosts=hosts)
+
+
+
 
 
